@@ -6580,45 +6580,51 @@ var NX_FOOTER_PAGES=['homePage','detailsPage','profilePage','profile2Page','prof
   setInterval(function(){ var ok=!!me(); $('pcRoot').hidden=!ok; if(!ok&&!$('pcBox').hidden) toggle(false); },800);
 })();
 </script>
-<!-- ═══ JARVIS VOICE ASSISTANT (Sinhala / English voice commands) ═══ -->
+<!-- ═══ JARVIS VOICE ASSISTANT (hands-free: say "Hello Jarvis") ═══ -->
 <style id="nxaCss">
-#nxaFab{position:fixed;left:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:2147482990;width:58px;height:58px;border-radius:50%;border:2px solid #00f0ff;background:#0b0f1d;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 0 22px rgba(0,240,255,.45);}
-#nxaFab.on{border-color:#39ff88;box-shadow:0 0 0 6px rgba(57,255,136,.18),0 0 28px rgba(57,255,136,.7);animation:nxaPulse 1.4s infinite;}
-@keyframes nxaPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
-#nxaBox{position:fixed;left:18px;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:2147482990;width:min(340px,calc(100vw - 24px));background:#0a0e1a;border:1px solid rgba(0,240,255,.55);border-radius:16px;padding:12px;box-shadow:0 10px 40px rgba(0,0,0,.6);font-family:'Rajdhani',system-ui,sans-serif;color:#f2f2f5;}
-#nxaBox[hidden]{display:none!important;}
-#nxaBox .nxa-h{display:flex;align-items:center;gap:8px;font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:1px;margin-bottom:8px;}
-#nxaBox .nxa-h b{flex:1;color:#00f0ff;}
-#nxaBox .nxa-h button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:10px;padding:4px 9px;font-weight:700;cursor:pointer;font-size:12px;}
-#nxaHeard{min-height:20px;font-size:14px;color:#9a9aa8;margin-bottom:6px;word-break:break-word;}
-#nxaSay{min-height:22px;font-size:16px;font-weight:600;color:#00f0ff;margin-bottom:8px;word-break:break-word;}
-#nxaBox form{display:flex;gap:6px;}
-#nxaBox input{flex:1;min-width:0;padding:9px 12px;border-radius:18px;border:1px solid rgba(255,255,255,.15);background:#10152a;color:#fff;font-size:15px;outline:none;font-family:inherit;}
-#nxaBox form button{border:0;border-radius:18px;padding:0 14px;background:#00f0ff;color:#0a0a0f;font-weight:800;cursor:pointer;font-family:inherit;}
-#nxaHint{margin-top:8px;font-size:12px;color:#6b7390;line-height:1.4;}
+#nxaOrb{position:fixed;left:50%;bottom:calc(5vh + env(safe-area-inset-bottom,0px));transform:translateX(-50%) scale(.55);z-index:2147482990;width:min(380px,94vw);display:flex;flex-direction:column;align-items:center;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .5s cubic-bezier(.2,.9,.3,1.15);font-family:'Rajdhani',system-ui,sans-serif;text-align:center;}
+#nxaOrb.on{opacity:1;transform:translateX(-50%) scale(1);}
+#nxaOrb .nxa-ball{position:relative;width:min(240px,58vw);aspect-ratio:1;pointer-events:auto;cursor:pointer;}
+#nxaCv{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 12px rgba(200,150,255,.8)) drop-shadow(0 0 30px rgba(140,90,255,.45));}
+.nxa-rp{position:absolute;left:50%;top:50%;width:56%;aspect-ratio:1;margin:-28% 0 0 -28%;border-radius:50%;border:1.5px solid rgba(225,200,255,.75);opacity:0;pointer-events:none;}
+#nxaOrb.on .nxa-rp{animation:nxaRp 3s ease-out infinite;}
+#nxaOrb.on .nxa-rp:nth-of-type(2){animation-delay:1s;}
+#nxaOrb.on .nxa-rp:nth-of-type(3){animation-delay:2s;}
+#nxaOrb.speak .nxa-rp{animation-duration:1.6s;}
+@keyframes nxaRp{0%{transform:scale(.75);opacity:.6;}100%{transform:scale(2.15);opacity:0;}}
+#nxaHeard{min-height:20px;margin-top:2px;font-size:15px;color:rgba(255,255,255,.7);text-shadow:0 0 6px #000,0 0 14px #000;word-break:break-word;}
+#nxaSay{min-height:24px;margin:2px 0 8px;font-size:19px;font-weight:700;color:#efe2ff;text-shadow:0 0 6px #000,0 0 16px #000;word-break:break-word;}
+#nxaOrb form{display:flex;gap:6px;width:min(300px,90vw);pointer-events:auto;}
+#nxaOrb input{flex:1;min-width:0;padding:8px 14px;border-radius:18px;border:1px solid rgba(220,190,255,.35);background:rgba(10,8,20,.55);color:#fff;font-size:15px;outline:none;font-family:inherit;}
+#nxaOrb form button{border:0;border-radius:18px;padding:0 14px;background:rgba(220,190,255,.85);color:#120a22;font-weight:800;cursor:pointer;}
+.nxa-ctl{display:flex;gap:8px;margin-top:8px;pointer-events:auto;}
+.nxa-ctl button{background:rgba(10,8,20,.5);border:1px solid rgba(220,190,255,.3);color:#e8dcff;border-radius:12px;padding:3px 11px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
 #rbStage.nxaTalk .rb-glow{animation:nxaTalk .45s ease-in-out infinite alternate;}
 @keyframes nxaTalk{from{opacity:.55;transform:scale(1);}to{opacity:1;transform:scale(1.18);}}
+@media (prefers-reduced-motion:reduce){#nxaOrb .nxa-rp{animation:none!important;}}
 </style>
-<button id="nxaFab" type="button" aria-label="Jarvis voice">🎙️</button>
-<div id="nxaBox" hidden>
-  <div class="nxa-h"><b>JARVIS · හඬ විධාන</b><button type="button" id="nxaWake" title="Wake word">WAKE ✓</button><button type="button" id="nxaLang">සිං</button><button type="button" id="nxaX">✕</button></div>
-  <div id="nxaHeard">🎙️ ඔබ කියපු දේ මෙතන පෙනෙයි…</div>
-  <div id="nxaSay">ආයුබෝවන් සර්! මම ජාවිස් (Jarvis).</div>
-  <form id="nxaForm" autocomplete="off"><input id="nxaIn" type="text" placeholder="විධානය ටයිප් කරන්න…"><button type="submit">යවන්න</button></form>
-  <div id="nxaHint">මුලින් “ජාවිස්” (Jarvis) කියන්න. උදා: “ජාවිස්, ගිණුම්”, “Jarvis, status report”, “ජාවිස්, අද ආදායම”, “ජාවිස්, ඉතිරි ස්ටොක් කීයද?”, “ජාවිස්, උදව්”</div>
+<div id="nxaOrb" aria-live="polite">
+  <div class="nxa-ball" id="nxaBall" title="Tap to close">
+    <canvas id="nxaCv" width="320" height="320"></canvas>
+    <i class="nxa-rp"></i><i class="nxa-rp"></i><i class="nxa-rp"></i>
+  </div>
+  <div id="nxaHeard"></div>
+  <div id="nxaSay"></div>
+  <form id="nxaForm" autocomplete="off"><input id="nxaIn" type="text" placeholder="ටයිප් කරන්නත් පුළුවන්…"><button type="submit">➤</button></form>
+  <div class="nxa-ctl"><button type="button" id="nxaLang">සිං</button><button type="button" id="nxaX">✕</button></div>
 </div>
 <script id="nxaJs">
 (function(){
   var BOT='ජාවිස්';var WAKE=/jarvis|jarvish|jervis|ජාවිස්ස්|ජාවිස්|ජාවිස|ජාර්විස්|ජාර්විස්|ජර්විස්|ජාවිශ්/;var WAKEG=new RegExp(WAKE.source,'g');var wakeReq=true,awakeUntil=0;
-  var fab=document.getElementById('nxaFab'),box=document.getElementById('nxaBox'),heard=document.getElementById('nxaHeard'),sayEl=document.getElementById('nxaSay'),inp=document.getElementById('nxaIn'),langBtn=document.getElementById('nxaLang');
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,on=false,lang='si-LK',mutedUntil=0;
+  var heard=document.getElementById('nxaHeard'),sayEl=document.getElementById('nxaSay'),inp=document.getElementById('nxaIn'),langBtn=document.getElementById('nxaLang');
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,lang='si-LK',mutedUntil=0;
   function norm(s){return String(s||'').toLowerCase().replace(/[\u200c\u200d]/g,'').replace(/[.,!?;:"'“”‘’]/g,' ').replace(/\s+/g,' ').trim();}
   function has(t,keys){for(var i=0;i<keys.length;i++){if(t.indexOf(norm(keys[i]))>=0)return true;}return false;}
   function call(n){var f=window[n];if(typeof f==='function'){try{f();return true;}catch(e){}}return false;}
 
   /* ── bot name on the robot caption ── */
   var prevIdle=window.vkIdle;
-  window.vkIdle=function(){var o=document.getElementById('ccGrid');return (o&&o.classList.contains('vk-open'))?'Tap my chest to close chat':'Hi, I am JARVIS \u00b7 tap my chest to chat \u00b7 say "Jarvis" \uD83C\uDF99';};
+  window.vkIdle=function(){var o=document.getElementById('ccGrid');return (o&&o.classList.contains('vk-open'))?'Tap my chest to close chat':'Hi, I am JARVIS \u00b7 say "Hello Jarvis"';};
   var um=document.getElementById('ultMsg');if(um&&/Nexis bot/i.test(um.textContent))um.textContent=window.vkIdle();
 
   /* ── speaking ── */
@@ -6631,8 +6637,8 @@ var NX_FOOTER_PAGES=['homePage','detailsPage','profilePage','profile2Page','prof
     try{
       var v=voice(),u=new SpeechSynthesisUtterance(v?r.si:r.en);
       if(v){u.voice=v;u.lang=v.lang;}else u.lang='en-US';
-      u.onstart=function(){if(stage)stage.classList.add('nxaTalk');};
-      u.onend=u.onerror=function(){if(stage)stage.classList.remove('nxaTalk');mutedUntil=Date.now()+400;};
+      u.onstart=function(){if(stage)stage.classList.add('nxaTalk');setMode('speak');};
+      u.onend=u.onerror=function(){if(stage)stage.classList.remove('nxaTalk');mutedUntil=Date.now()+400;onSpeakEnd();};
       mutedUntil=Date.now()+60000;
       speechSynthesis.cancel();speechSynthesis.speak(u);
     }catch(e){}
@@ -6737,42 +6743,107 @@ var NX_FOOTER_PAGES=['homePage','detailsPage','profilePage','profile2Page','prof
   }
 
 
-  function gate(raw){
-    var t=norm(raw),wk=WAKE.test(t),now=Date.now();
-    if(!wakeReq||wk||now<awakeUntil){awakeUntil=now+12000;run(raw);}
-    else{heard.textContent='🎙️ '+raw+'  ·  (මුලින් “ජාවිස්” කියන්න)';}
+  /* ── ORB (appears on ANY page when you say "Hello Jarvis") ── */
+  var orb=document.getElementById('nxaOrb'),cv=document.getElementById('nxaCv'),c2=cv.getContext('2d');
+  var orbOpen=false,mode='listen',idleT=null,raf=0,ang=0,phase='wake',denied=false,tries=0,lastStart=0;
+  function setMode(m){mode=m;orb.classList.toggle('speak',m==='speak');}
+  function armIdle(){clearTimeout(idleT);idleT=setTimeout(closeOrb,10000);}
+  function openOrb(){
+    if(!orbOpen){orbOpen=true;orb.classList.add('on');if(!raf)raf=requestAnimationFrame(draw);}
+    armIdle();
   }
-  function greet(){var h=new Date().getHours();var g=h<12?{si:'සුභ උදෑසනක්',en:'Good morning'}:h<17?{si:'සුභ දහවලක්',en:'Good afternoon'}:{si:'සුභ සන්ධ්‍යාවක්',en:'Good evening'};say({si:g.si+' සර්. ජාවිස් සූදානම්. මොනවද කරන්න ඕන?',en:g.en+', sir. Jarvis is online. How can I help?'});}
-  /* ── listening ── */
-  function setUi(){fab.classList.toggle('on',on);fab.textContent=on?'🔴':'🎙️';langBtn.textContent=lang==='si-LK'?'සිං':'EN';}
-  function begin(){
-    if(!SR){say({si:'මෙම බ්‍රවුසරයේ හඬ හඳුනාගැනීම නැහැ. Chrome භාවිතා කරන්න, නැත්නම් පහළින් ටයිප් කරන්න.',en:'Voice recognition is not supported here. Use Chrome or type below.'});on=false;setUi();return;}
-    try{rec&&rec.abort();}catch(e){}
-    rec=new SR();rec.lang=lang;rec.continuous=false;rec.interimResults=true;rec.maxAlternatives=3;
-    rec.onresult=function(e){
-      if(Date.now()<mutedUntil)return;
-      var r=e.results[e.results.length-1];
-      heard.textContent='🎙️ '+r[0].transcript;
-      if(r.isFinal){var cands=[];for(var i=0;i<r.length;i++)cands.push(r[i].transcript);gate(cands[0]);}
-    };
-    rec.onerror=function(e){
-      if(e.error==='not-allowed'||e.error==='service-not-allowed'){on=false;setUi();say({si:'මයික්‍රොෆෝන් අවසරය ලැබුණේ නැහැ. බ්‍රවුසරයේ අවසරය දෙන්න, නැත්නම් පහළින් ටයිප් කරන්න.',en:'Microphone permission was blocked. Allow it in the browser or type below.'});}
-      else if(e.error==='language-not-supported'){lang='en-US';setUi();say({si:'සිංහල හඳුනාගැනීම මෙම උපාංගයේ නැහැ. English වලට මාරු කළා.',en:'Sinhala recognition is unavailable here. Switched to English.'});}
-    };
-    rec.onend=function(){if(on)setTimeout(function(){if(on)begin();},300);else setUi();};
-    try{rec.start();}catch(e){}
+  function closeOrb(){
+    clearTimeout(idleT);orbOpen=false;orb.classList.remove('on','speak');mode='listen';
+    try{speechSynthesis.cancel();}catch(e){}
+    if(stage)stage.classList.remove('nxaTalk');
+    if(phase!=='wake'){phase='wake';restart();}
   }
-  function stopRec(){on=false;try{rec&&rec.abort();}catch(e){}setUi();}
-  fab.addEventListener('click',function(){
-    box.hidden=false;
-    if(on){stopRec();return;}
-    on=true;setUi();greet();begin();
-  });
-  document.getElementById('nxaX').addEventListener('click',function(){stopRec();box.hidden=true;try{speechSynthesis.cancel();}catch(e){}});
-  langBtn.addEventListener('click',function(){lang=(lang==='si-LK')?'en-US':'si-LK';setUi();if(on){try{rec&&rec.abort();}catch(e){}}});
-  document.getElementById('nxaForm').addEventListener('submit',function(ev){ev.preventDefault();var v=inp.value;inp.value='';run(v);});
-  var wb=document.getElementById('nxaWake');wb.addEventListener('click',function(){wakeReq=!wakeReq;wb.textContent=wakeReq?'WAKE ✓':'WAKE ✗';say(wakeReq?{si:'හරි සර්, “ජාවිස්” කිව්වම විතරක් අහගන්නවා.',en:'Understood, sir. I will respond only when you say Jarvis.'}:{si:'හරි සර්, දැන් හැමදේම අහගන්නවා.',en:'Understood, sir. I will respond to everything now.'});});
-  setUi();
+  function onSpeakEnd(){setMode('listen');if(orbOpen)armIdle();}
+  var _say=say;
+  say=function(r){openOrb();setMode('speak');_say(r);};
+  function stopRec(){setTimeout(closeOrb,2500);}
+
+  /* wireframe globe + rings (transparent background) */
+  function ring(c,R,t,far){
+    var k=[1.25,1.52,1.8],a=[.7,.42,.26];
+    for(var i=0;i<3;i++){
+      var rx=R*k[i]*(1+0.025*Math.sin(t/600+i)),ry=rx*0.17;
+      c.beginPath();c.ellipse(0,0,rx,ry,-0.08,far?Math.PI:0,far?Math.PI*2:Math.PI);
+      c.strokeStyle='rgba(235,220,255,'+(far?a[i]*0.45:a[i])+')';c.lineWidth=far?1:1.5;c.stroke();
+    }
+  }
+  function globe(c,R){
+    var LA=9,LO=18,P=[],tx=0.38,ct=Math.cos(tx),st=Math.sin(tx),i,j;
+    for(i=0;i<LA;i++){P[i]=[];var la=-Math.PI/2+Math.PI*(i+0.5)/LA;
+      for(j=0;j<LO;j++){var lo=2*Math.PI*j/LO+ang,x=Math.cos(la)*Math.sin(lo),y=Math.sin(la),z=Math.cos(la)*Math.cos(lo);
+        P[i][j]={x:x*R,y:(y*ct-z*st)*R,z:(y*st+z*ct)*R};}}
+    function seg(p,q){var zz=(p.z+q.z)/2/R,al=0.10+0.6*(zz+1)/2;c.strokeStyle='rgba(255,255,255,'+al.toFixed(3)+')';c.lineWidth=zz>0?1.15:0.7;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();}
+    for(i=0;i<LA;i++)for(j=0;j<LO;j++){
+      var p=P[i][j];seg(p,P[i][(j+1)%LO]);
+      if(i<LA-1){seg(p,P[i+1][j]);seg(p,P[i+1][(j+1)%LO]);}
+    }
+  }
+  function draw(t){
+    if(!orbOpen){raf=0;c2.clearRect(0,0,cv.width,cv.height);return;}
+    var W=cv.width,R=W*0.28,sp=(mode==='speak');
+    c2.clearRect(0,0,W,W);
+    ang+=sp?0.024:0.011;
+    var pul=sp?1+0.05*Math.sin(t/95):1+0.018*Math.sin(t/420);
+    c2.save();c2.translate(W/2,W/2);c2.scale(pul,pul);c2.lineCap='round';
+    ring(c2,R,t,true);globe(c2,R);ring(c2,R,t,false);
+    var g=c2.createRadialGradient(0,0,0,0,0,R*0.24);
+    g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(1,'rgba(255,255,255,0)');
+    c2.fillStyle=g;c2.beginPath();c2.arc(0,0,R*0.24,0,6.2832);c2.fill();
+    c2.restore();
+    raf=requestAnimationFrame(draw);
+  }
+
+  /* ── always-on wake-word listening ── */
+  function onRes(e){
+    if(Date.now()<mutedUntil)return;
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      var res=e.results[i],tx=res[0].transcript,t=norm(tx);
+      if(phase==='wake'){
+        if(WAKE.test(t)){openOrb();sayEl.textContent='ඔව් සර්, අහගෙන ඉන්නවා…';heard.textContent='🎙️ '+tx;}
+        if(res.isFinal&&WAKE.test(t)){
+          var rest=t.replace(WAKEG,' ').replace(/\b(hello|hallo|hey|hi|ok|okay)\b/g,' ').replace(/\s+/g,' ').trim();
+          phase='cmd';restart();
+          if(rest)run(rest);
+        }
+      }else{
+        openOrb();heard.textContent='🎙️ '+tx;
+        if(res.isFinal)run(tx);
+      }
+    }
+  }
+  function startRec(){
+    if(!SR||denied||rec)return;
+    var r=new SR();rec=r;
+    r.lang=(phase==='wake')?'en-US':lang;
+    r.continuous=(phase==='wake');r.interimResults=true;r.maxAlternatives=1;
+    r.onresult=onRes;
+    r.onerror=function(e){if(e.error==='not-allowed'||e.error==='service-not-allowed')denied=true;};
+    r.onend=function(){
+      if(rec===r)rec=null;
+      if(r.__dead||denied)return;
+      setTimeout(startRec,(Date.now()-lastStart<1500)?2500:350);
+    };
+    lastStart=Date.now();
+    try{r.start();}catch(e){rec=null;}
+  }
+  function restart(){var r=rec;rec=null;if(r){r.__dead=1;try{r.abort();}catch(e){}}setTimeout(startRec,200);}
+
+  /* manual wake (works even when the mic is blocked): Alt+J, or window.jarvisWake() */
+  window.jarvisWake=function(){openOrb();if(phase!=='cmd'){phase='cmd';restart();}sayEl.textContent='ඔව් සර්, අහගෙන ඉන්නවා…';heard.textContent='';};
+  document.addEventListener('keydown',function(e){if(e.altKey&&(e.key==='j'||e.key==='J')){e.preventDefault();window.jarvisWake();inp.focus();}});
+  document.addEventListener('pointerdown',function(){if(denied&&tries<3){tries++;denied=false;}if(!rec)startRec();},true);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden&&!rec)startRec();});
+
+  document.getElementById('nxaForm').addEventListener('submit',function(ev){ev.preventDefault();var v=inp.value;inp.value='';if(v.trim()){openOrb();run(v);}});
+  document.getElementById('nxaX').addEventListener('click',closeOrb);
+  document.getElementById('nxaBall').addEventListener('click',closeOrb);
+  langBtn.addEventListener('click',function(){lang=(lang==='si-LK')?'en-US':'si-LK';langBtn.textContent=lang==='si-LK'?'සිං':'EN';if(phase==='cmd')restart();armIdle();});
+  startRec();
 })();
 </script>
 
