@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- NEXIS API BRIDGE: lets this GitHub Pages site talk to the SAME Google Sheets backend (Apps Script web app) as the laptop version -->
+<script id="nxApiBridge">
+(function(){
+  /* >>> PASTE YOUR APPS SCRIPT WEB APP URL HERE (ends with /exec) <<< */
+  var URL_ = 'https://script.google.com/macros/s/AKfycby0U7bLt8ZDqTNmom_rF6VRlYVqrbz16Tr5XM_XWO9bsqgcWxX0HluUMlvBL13w6GM/exec';
+  if(window.google && window.google.script && window.google.script.run) return;      /* already inside Apps Script */
+  if(!/^https:\/\/script\.google(usercontent)?\.com\//.test(URL_)) return;           /* not configured yet -> old demo mode */
+  function make(ok,fail){
+    return new Proxy({},{get:function(_,k){
+      if(k==='withSuccessHandler') return function(f){ return make(f,fail); };
+      if(k==='withFailureHandler') return function(f){ return make(ok,f); };
+      if(k==='withUserObject') return function(){ return make(ok,fail); };
+      if(typeof k!=='string'||k==='then') return undefined;
+      return function(){
+        var args=Array.prototype.slice.call(arguments);
+        fetch(URL_,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn:k,args:args}),redirect:'follow'})
+          .then(function(r){ return r.json(); })
+          .then(function(j){ if(j&&j.ok){ if(ok) ok(j.data); } else if(fail){ fail({message:(j&&j.error)||'Server error'}); } })
+          .catch(function(){ if(fail) fail({message:'Network error. Check your connection.'}); });
+      };
+    }});
+  }
+  window.google={script:{run:make(null,null)}};
+})();
+</script>
 <!-- gsBridge removed: DEMO version (offline, demo data) -->
 
 <meta charset="UTF-8">
@@ -7652,7 +7677,14 @@ var NX_FOOTER_PAGES=['homePage','detailsPage','profilePage','profile2Page','prof
   setInterval(ping,25000); setTimeout(ping,3000);
   /* the chat button shows inside the customer / distributor profile and the owner profile */
   function shown(id){ var e=$(id); return !!e&&getComputedStyle(e).display!=='none'; }
-  setInterval(function(){ var ok=!!me(); $('pcRoot').hidden=!ok; if(!ok&&!$('pcBox').hidden) toggle(false);
+  /* chat bot ONLY on the profile pages (owner / admin / distributor / customer) - never on the main home page */
+  function onProfilePage(){
+    if(shown('homePage')) return false;
+    var ids=['profilePage','hubPage','adminPage','distPage','custPage','ownerProfPage','ownerHomePage','acctPage'];
+    for(var i=0;i<ids.length;i++) if(shown(ids[i])) return true;
+    return false;
+  }
+  setInterval(function(){ var ok=!!me()&&onProfilePage(); $('pcRoot').hidden=!ok; if(!ok&&!$('pcBox').hidden) toggle(false);
     if(ok){ var r=window._isOwner?'OWNER':(typeof acRole==='function'&&acRole()===true?'DISTRIBUTOR':(typeof acRole==='function'&&acRole()===false?'CUSTOMER':'PLAYER'));
       var ems=document.querySelectorAll('#pcBox .pc-brand em'); for(var i=0;i<ems.length;i++) if(ems[i].textContent!==r) ems[i].textContent=r; }
   },800);
